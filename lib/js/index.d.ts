@@ -127,16 +127,16 @@ export type ClusterMarkerItem = {
 
 export interface ClusterProps extends ViewProps {
   markers: ClusterMarkerItem[];
-  renderMarker: (ClusterMarkerItem) => ReactElement<any>;
+  renderMarker: (ClusterMarkerItem: any) => ReactElement<any>;
   radius?: number;
   clusterStyle?: ViewStyle;
   clusterTextStyle?: ViewStyle;
-  renderCluster?: (ClusterParams) => ReactElement<any>;
-  onPress?: (ClusterParams) => void;
+  renderCluster?: (ClusterParams: any) => ReactElement<any>;
+  onPress?: (ClusterParams: any) => void;
 }
 
 export class Cluster extends Component<ClusterProps> {
-  update({ zoomLevel: number, region: Region }): void;
+  update(args: { zoomLevel: number; region: Region }): void;
 }
 
 export interface MapViewProps extends ViewProps {
@@ -209,7 +209,7 @@ export class Geocode {
 }
 
 export class Initializer {
-  static init(iosKey: string): Promise<void>;
+  static init(iosKey?: string): Promise<void>;
 }
 
 export type LocationOptions = {
@@ -227,8 +227,8 @@ type LocationListener = (
 
 export class Geolocation {
   static init(): Promise<void>;
-  static start();
-  static stop();
-  static setOptions(options: LocationOptions);
-  static addLocationListener(listener: LocationListener);
+  static start(): Promise<void>;
+  static stop(): Promise<void>;
+  static setOptions(options: LocationOptions): Promise<void>;
+  static addLocationListener(listener: LocationListener): Promise<void>;
 }
