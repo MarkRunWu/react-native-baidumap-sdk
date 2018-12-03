@@ -9,6 +9,8 @@ import com.baidu.mapapi.map.MapStatus
 import com.baidu.mapapi.map.MapStatusUpdateFactory
 import com.baidu.mapapi.map.MyLocationConfiguration
 import com.baidu.mapapi.map.MyLocationConfiguration.LocationMode
+import com.facebook.react.bridge.Promise
+import com.facebook.react.bridge.ReactMethod
 import com.facebook.react.bridge.ReadableArray
 import com.facebook.react.bridge.ReadableMap
 import com.facebook.react.common.MapBuilder
@@ -47,7 +49,8 @@ class BaiduMapViewManager : ViewGroupManager<BaiduMapView>() {
                 "onClick", MapBuilder.of("registrationName", "onBaiduMapClick"),
                 "onLongClick", MapBuilder.of("registrationName", "onBaiduMapLongClick"),
                 "onDoubleClick", MapBuilder.of("registrationName", "onBaiduMapDoubleClick"),
-                "onStatusChange", MapBuilder.of("registrationName", "onBaiduMapStatusChange")
+                "onStatusChange", MapBuilder.of("registrationName", "onBaiduMapStatusChange"),
+                "onMove", MapBuilder.of("registrationName", "onBaiduMapMove")
         )
     }
 
@@ -64,6 +67,7 @@ class BaiduMapViewManager : ViewGroupManager<BaiduMapView>() {
             SET_STATUS -> mapView.setStatus(args)
         }
     }
+
 
     @ReactProp(name = "satellite")
     fun setSatellite(mapView: BaiduMapView, satellite: Boolean) {
@@ -167,6 +171,15 @@ class BaiduMapViewManager : ViewGroupManager<BaiduMapView>() {
             else -> LocationMode.NORMAL
         }
         mapView.map.setMyLocationConfiguration(MyLocationConfiguration(locationMode, true, null))
+    }
+
+    @ReactProp(name = "mapPadding")
+    fun setPadding(mapView: BaiduMapView, mapPadding: ReadableMap) {
+        val left = if (mapPadding.hasKey("left")) mapPadding.getInt("left") else 0
+        val top = if (mapPadding.hasKey("top")) mapPadding.getInt("top") else 0
+        val right = if (mapPadding.hasKey("right")) mapPadding.getInt("right") else 0
+        val bottom = if (mapPadding.hasKey("bottom")) mapPadding.getInt("bottom") else 0
+        mapView.map.setViewPadding(left, top, right, bottom)
     }
 
     @ReactProp(name = "paused")

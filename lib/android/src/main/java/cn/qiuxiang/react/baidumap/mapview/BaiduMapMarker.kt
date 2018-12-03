@@ -81,6 +81,11 @@ class BaiduMapMarker(context: Context) : ReactViewGroup(context), BaiduMapOverla
         marker?.isDraggable = draggable
     }
 
+    fun setAnchor(x: Float, y: Float) {
+        options.anchor(x, y)
+        marker?.setAnchor(x, y)
+    }
+
     fun setMarkerView(view: View) {
         markerView = view
         view.addOnLayoutChangeListener { _, _, _, _, _, _, _, _, _ ->

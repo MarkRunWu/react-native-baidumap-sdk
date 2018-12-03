@@ -1,17 +1,17 @@
 export type Point = {
   x: number,
   y: number,
-}
+};
 
 export type LatLng = {
   latitude: number,
   longitude: number,
-}
+};
 
 export type Region = {
   latitudeDelta: number,
   longitudeDelta: number,
-} & LatLng
+} & LatLng;
 
 export type MapStatus = {
   center: LatLng,
@@ -19,11 +19,18 @@ export type MapStatus = {
   overlook: number,
   rotation: number,
   zoomLevel: number,
-}
+};
 
 export type Location = {
   accuracy?: number,
   latitude: number,
   longitude: number,
   direction: number,
-}
+};
+
+export type EdgePadding = {
+  top: Number,
+  right: Number,
+  bottom: Number,
+  left: Number,
+};

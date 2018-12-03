@@ -4,6 +4,7 @@ import cn.qiuxiang.react.baidumap.mapview.*
 import cn.qiuxiang.react.baidumap.modules.BaiduMapGeocodeModule
 import cn.qiuxiang.react.baidumap.modules.BaiduMapInitializerModule
 import cn.qiuxiang.react.baidumap.modules.BaiduMapLocationModule
+import cn.qiuxiang.react.baidumap.modules.BaiduMapUtilModule
 import com.facebook.react.ReactPackage
 import com.facebook.react.bridge.NativeModule
 import com.facebook.react.bridge.ReactApplicationContext
@@ -14,7 +15,8 @@ class BaiduMapPackage : ReactPackage {
         return listOf(
                 BaiduMapLocationModule(context),
                 BaiduMapGeocodeModule(context),
-                BaiduMapInitializerModule(context)
+                BaiduMapInitializerModule(context),
+                BaiduMapUtilModule(context)
         )
     }
 

@@ -1,7 +1,9 @@
 package cn.qiuxiang.react.baidumap.mapview
 
+import android.graphics.Point
 import android.view.View
 import cn.qiuxiang.react.baidumap.toLatLng
+import cn.qiuxiang.react.baidumap.toPoint
 import com.facebook.react.bridge.ReadableArray
 import com.facebook.react.bridge.ReadableMap
 import com.facebook.react.common.MapBuilder
@@ -89,5 +91,12 @@ class BaiduMapMarkerManager : ViewGroupManager<BaiduMapMarker>() {
     @ReactProp(name = "flat")
     fun setFlat(view: BaiduMapMarker, flat: Boolean) {
         view.setFlat(flat)
+    }
+
+    @ReactProp(name = "anchor")
+    fun setAnchor(view: BaiduMapMarker, anchor: ReadableMap) {
+        val anchorX = if (anchor.hasKey("x")) anchor.getDouble("x") else 0.0
+        val anchorY = if (anchor.hasKey("y")) anchor.getDouble("y") else 0.0
+        view.setAnchor(anchorX.toFloat(), anchorY.toFloat())
     }
 }

@@ -1,6 +1,8 @@
 package cn.qiuxiang.react.baidumap.mapview
 
 import android.content.Context
+import android.graphics.Point
+import android.util.Log
 import android.view.MotionEvent
 import android.view.View
 import android.widget.FrameLayout
@@ -16,6 +18,7 @@ import com.facebook.react.bridge.ReadableArray
 import com.facebook.react.bridge.WritableMap
 import com.facebook.react.uimanager.ThemedReactContext
 import com.facebook.react.uimanager.events.RCTEventEmitter
+import kotlin.math.log
 
 class BaiduMapView(context: Context) : FrameLayout(context) {
     private val emitter = (context as ThemedReactContext).getJSModule(RCTEventEmitter::class.java)
@@ -49,6 +52,12 @@ class BaiduMapView(context: Context) : FrameLayout(context) {
         mapView.layoutParams = LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT)
         map.setMyLocationConfiguration(MyLocationConfiguration(LocationMode.NORMAL, true, null))
         super.addView(mapView)
+
+        map.setOnMapTouchListener {
+            if (it.action == MotionEvent.ACTION_MOVE) {
+                emit(id, "onMove")
+            }
+        }
 
         map.setOnMapLoadedCallback {
             emit(id, "onLoad")
@@ -176,7 +185,7 @@ class BaiduMapView(context: Context) : FrameLayout(context) {
 
         if (target.hasKey("region")) {
             setStatus(MapStatusUpdateFactory.newLatLngBounds(
-                target.getMap("region").toLatLngBounds()), duration)
+                    target.getMap("region").toLatLngBounds()), duration)
         } else {
             setStatus(MapStatusUpdateFactory.newMapStatus(mapStatusBuilder.build()), duration)
         }
