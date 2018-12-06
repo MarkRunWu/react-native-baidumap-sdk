@@ -1,7 +1,9 @@
 package cn.qiuxiang.react.baidumap.modules
 
 import android.graphics.Point
+import cn.qiuxiang.react.baidumap.CoordinateTransformUtil
 import cn.qiuxiang.react.baidumap.mapview.BaiduMapView
+import cn.qiuxiang.react.baidumap.toLatLng
 import com.baidu.mapapi.model.LatLng
 import com.facebook.react.bridge.*
 import com.facebook.react.uimanager.NativeViewHierarchyManager
@@ -17,10 +19,6 @@ class BaiduMapUtilModule(context: ReactApplicationContext) : ReactContextBaseJav
 
     @ReactMethod
     fun pointForCoordinate(tag: Int, coordinate: ReadableMap, promise: Promise) {
-        val coord = LatLng(
-                if (coordinate.hasKey("latitude")) coordinate.getDouble("latitude") else 0.0,
-                if (coordinate.hasKey("longitude")) coordinate.getDouble("longitude") else 0.0
-        )
         val context = reactApplicationContext
         val uiManager = context.getNativeModule<UIManagerModule>(UIManagerModule::class.java)
         uiManager.addUIBlock(object : UIBlock {
@@ -31,7 +29,7 @@ class BaiduMapUtilModule(context: ReactApplicationContext) : ReactContextBaseJav
                     return
                 }
 
-                val pt = view.map.projection.toScreenLocation(coord)
+                val pt = view.map.projection.toScreenLocation(coordinate.toLatLng())
 
                 val ptJson = WritableNativeMap()
                 ptJson.putDouble("x", pt.x.toDouble())
@@ -58,7 +56,7 @@ class BaiduMapUtilModule(context: ReactApplicationContext) : ReactContextBaseJav
                     return
                 }
 
-                val coordinate = view.map.projection.fromScreenLocation(point)
+                val coordinate = CoordinateTransformUtil.bd09towgs84(view.map.projection.fromScreenLocation(point))
 
                 val coordinateJson = WritableNativeMap()
                 coordinateJson.putDouble("latitude", coordinate.latitude)

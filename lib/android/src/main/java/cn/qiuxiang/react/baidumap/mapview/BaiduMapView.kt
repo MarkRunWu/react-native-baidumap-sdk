@@ -6,10 +6,7 @@ import android.util.Log
 import android.view.MotionEvent
 import android.view.View
 import android.widget.FrameLayout
-import cn.qiuxiang.react.baidumap.toLatLng
-import cn.qiuxiang.react.baidumap.toLatLngBounds
-import cn.qiuxiang.react.baidumap.toPoint
-import cn.qiuxiang.react.baidumap.toWritableMap
+import cn.qiuxiang.react.baidumap.*
 import com.baidu.mapapi.map.*
 import com.baidu.mapapi.map.MyLocationConfiguration.LocationMode
 import com.baidu.mapapi.model.LatLng

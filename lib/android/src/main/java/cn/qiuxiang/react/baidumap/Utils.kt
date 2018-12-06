@@ -18,7 +18,8 @@ fun ReadableMap.toPoint(): Point {
 }
 
 fun ReadableMap.toLatLng(): LatLng {
-    return LatLng(this.getDouble("latitude"), this.getDouble("longitude"))
+    return CoordinateTransformUtil.wgs84tobd09(
+            LatLng(this.getDouble("latitude"), this.getDouble("longitude")))
 }
 
 fun ReadableMap.toLatLngBounds(): LatLngBounds {
@@ -27,8 +28,8 @@ fun ReadableMap.toLatLngBounds(): LatLngBounds {
     val latitudeDelta = this.getDouble("latitudeDelta")
     val longitudeDelta = this.getDouble("longitudeDelta")
     return LatLngBounds.Builder()
-            .include(LatLng(latitude - latitudeDelta / 2, longitude - longitudeDelta / 2))
-            .include(LatLng(latitude + latitudeDelta / 2, longitude + longitudeDelta / 2))
+            .include(CoordinateTransformUtil.wgs84tobd09(LatLng(latitude - latitudeDelta / 2, longitude - longitudeDelta / 2)))
+            .include(CoordinateTransformUtil.wgs84tobd09(LatLng(latitude + latitudeDelta / 2, longitude + longitudeDelta / 2)))
             .build()
 }
 
