@@ -15,15 +15,18 @@ class BaiduMapHeatMap(context: Context) : ReactViewGroup(context), BaiduMapOverl
 
     fun setPoints(points: ReadableArray) {
         this.points = (0..(points.size() - 1))
-                .map { points.getMap(it) }
-                .map {
-                    val intensity = if (it.hasKey("intensity")) it.getDouble("intensity") else 0.0
-                    WeightedLatLng(it.toLatLng(), intensity)
-                }
+            .map { points.getMap(it) }
+            .map {
+                val forceIt = it!!
+                val intensity = if (forceIt.hasKey("intensity")) forceIt.getDouble("intensity") else 0.0
+                WeightedLatLng(forceIt.toLatLng(), intensity)
+
+            }
     }
 
     override fun addTo(mapView: BaiduMapView) {
-        mapView.map.addHeatMap(HeatMap.Builder()
+        mapView.map.addHeatMap(
+            HeatMap.Builder()
                 .opacity(opacity)
                 .radius(radius)
                 .weightedData(points)
