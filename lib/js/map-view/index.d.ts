@@ -1,4 +1,4 @@
-/// <reference types="react" />
+import * as React from "react";
 import { ViewProps } from "react-native";
 import { LatLng, Location, MapStatus, Point, Region } from "../types";
 import Component from "../component";
@@ -44,8 +44,11 @@ declare type Props = {
     onStatusChange?: (mapStatus: MapStatus) => void;
 } & ViewProps;
 export default class MapView extends Component<Props> {
+    map: React.RefObject<any>;
     static propTypes: any;
     setStatus(status: Status, duration?: number): void;
+    pointForCoordinate(coordinate: LatLng): Promise<Point>;
+    coordinateForPoint(point: Point): Promise<LatLng>;
     nativeComponent: string;
     render(): JSX.Element;
     static Marker: typeof Marker;

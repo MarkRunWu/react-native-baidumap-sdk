@@ -1,11 +1,14 @@
 import * as React from "react";
 import { number, bool, string } from "prop-types";
-import { requireNativeComponent, ViewProps, ViewPropTypes } from "react-native";
 import {
-  LatLngPropType,
-  LocationPropType,
-  mapEventsPropType
-} from "../prop-types";
+  requireNativeComponent,
+  ViewProps,
+  ViewPropTypes,
+  Platform,
+  NativeModules,
+  findNodeHandle
+} from "react-native";
+import { LatLngPropType, LocationPropType, mapEventsPropType } from "../prop-types";
 import { LatLng, Location, MapStatus, Point, Region } from "../types";
 import Component from "../component";
 import Marker from "./marker";
@@ -15,6 +18,7 @@ import Polyline from "./polyline";
 import Polygon from "./polygon";
 import Circle from "./circle";
 import HeatMap from "./heat-map";
+const { BaiduMapUtil } = NativeModules;
 
 type Status = {
   center?: LatLng;
@@ -56,15 +60,11 @@ type Props = {
   onStatusChange?: (mapStatus: MapStatus) => void;
 } & ViewProps;
 
-const events = [
-  "onLoad",
-  "onClick",
-  "onLongClick",
-  "onDoubleClick",
-  "onStatusChange"
-];
+const events = ["onLoad", "onClick", "onLongClick", "onDoubleClick", "onStatusChange"];
 
 export default class MapView extends Component<Props> {
+  map: React.RefObject<any> = React.createRef();
+
   static propTypes = {
     ...ViewPropTypes,
     ...mapEventsPropType(events),
@@ -96,6 +96,19 @@ export default class MapView extends Component<Props> {
     this.call("setStatus", [status, duration]);
   }
 
+  pointForCoordinate(coordinate: LatLng) {
+    if (Platform.OS === "android") {
+      return BaiduMapUtil.pointForCoordinate(findNodeHandle(this.map), coordinate) as Promise<
+        Point
+      >;
+    }
+  }
+  coordinateForPoint(point: Point) {
+    if (Platform.OS === "android") {
+      return BaiduMapUtil.coordinateForPoint(findNodeHandle(this.map), point) as Promise<LatLng>;
+    }
+  }
+
   nativeComponent = "BaiduMapView";
 
   render() {
@@ -103,7 +116,14 @@ export default class MapView extends Component<Props> {
       ...this.props,
       ...this.handlers(events)
     };
-    return <BaiduMapView {...props} />;
+    return (
+      <BaiduMapView
+        ref={ref => {
+          this.map = ref;
+        }}
+        {...props}
+      />
+    );
   }
 
   static Marker = Marker;
